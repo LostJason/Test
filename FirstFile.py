@@ -3,6 +3,7 @@
 # @Time     ：2019/10/20 22:42
 # @Author   ：Jason Phillip
 # @File     ：FirstFile.py
+# https://docs.python.org/zh-cn/3.7/library/turtle.html?highlight=turtle#turtle.ontimer
 
 import turtle as t
 
