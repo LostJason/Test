@@ -14,34 +14,71 @@ def set_coordinate(x,y):
     t.penup()
     t.goto(x,y)
     t.pendown()
-coor = set_coordinate
+
 #绘制坐标系
-coor(-200,0)
-t.fd(400)
-coor(0,-200)
-t.left(90)
-t.fd(400)
-#绘制圆
-coor(100,0)
-t.circle(100)
+def dw_pos():
+    coor = set_coordinate
+    coor(0,-200)
+    t.left(90)
+    t.fd(400)
+    t.begin_fill()
+    t.right(150)
+    t.fd(10)
+    t.right(120)
+    t.fd(10)
+    t.right(120)
+    t.fd(10)
+    t.end_fill()
+
+    coor(-300,0)
+    t.setheading(0)
+    t.fd(600)
+    t.begin_fill()
+    t.right(150)
+    t.fd(10)
+    t.right(120)
+    t.fd(10)
+    t.right(120)
+    t.fd(10)
+    t.end_fill()
+    t.hideturtle()
+dw_pos()
 
 #绘制y = x**2 的图形
-def yx(a):
-    for x in range(-10,11):
-        y = x ** a
-        coor(x,y)
-        t.dot(2,'red')
-yx(2)
-t.hideturtle()
+
+#绘制心形1
+def drw_heart1(x,y,z,o):
+    t.setheading(o)
+    for i in range(x):
+        t.right(y)
+        t.fd(z)
+def drw_heart2(x,y,z,o):
+    t.setheading(o)
+    for i in range(x):
+        if y>0:
+            t.left(y+(i/4))
+        else:
+            t.left(y-(i/4))
+        t.fd(z)
+
+t.color('red','red')
+t.begin_fill()
+t.penup()
+t.setpos(0,100)
+t.pendown()
+drw_heart1(119,-1,1,120)
+drw_heart2(11,10,21,242)
+
+t.penup()
+t.setpos(0,100)
+t.pendown()
+drw_heart1(119,1,1,60)
+drw_heart2(11,-10,21,-62)
+t.end_fill()
+
+
+
 t.done()
-#
-# t.color('red','yellow')
-# t.speed(1)
-# t.fd(100)
-# #t.left(10)
-# t.dot(10,'blue')
-# t.penup()
-# t.goto(10,10)
-# t.write('Python 牛B')
+
 
 
