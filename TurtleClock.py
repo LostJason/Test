@@ -1,131 +1,150 @@
 # env       ：Python v 3.7.3
 # -*- coding：utf-8 -*-
-# @Time     ：2019/10/22 17:40
+# @Time     ：2019/10/20 22:42
 # @Author   ：Jason Phillip
-# @File     ：.py
+# @File     ：TurtleClock.py
+# https://docs.python.org/zh-cn/3.7/library/turtle.html?highlight=turtle#turtle.ontimer
 
 import turtle
 from datetime import *
 
-# 抬起画笔，向前运动一段距离放下
-def Skip(step):
+
+def create_Shape_Hand(name, length):
+    turtle.reset()
+    turtle.begin_poly()
     turtle.penup()
-    turtle.forward(step)
+    turtle.fd(length)
+    turtle.hideturtle()
+    turtle.end_poly()
+    turtle.register_shape(name, turtle.get_poly())
+
+
+def create_Shape_Clock(name, length, heigth):
+    turtle.reset()
+    turtle.pensize(5)
+    turtle.penup()
+    turtle.fd(length)
+    turtle.pendown()
+    turtle.begin_poly()
+    turtle.fd(heigth)
+    turtle.hideturtle()
+    turtle.end_poly()
+    turtle.register_shape(name, turtle.get_poly())
+
+
+def setup_Hand():
+    global mz, fz, sz
+    create_Shape_Hand('miaozhen', 200)
+    create_Shape_Hand('fenzhen', 180)
+    create_Shape_Hand('shizhen', 120)
+    mz = turtle.Turtle()
+    fz = turtle.Turtle()
+    sz = turtle.Turtle()
+    mz.shape('miaozhen')
+    fz.shape('fenzhen')
+    sz.shape('shizhen')
+
+
+# 乌龟返回原点，不画线
+def backorigin():
+    turtle.penup()
+    turtle.home()
     turtle.pendown()
 
-def mkHand(name, length):
-    # 注册Turtle形状，建立表针Turtle
-    turtle.reset()
-    Skip(-length * 0.1)
 
-    # 开始记录多边形的顶点。当前的乌龟位置是多边形的第一个顶点。
-    turtle.begin_poly()
-    turtle.forward(length * 1.1)
+# 乌龟前进指定长度， 但不画线
+def drw_null(x):
+    turtle.penup()
+    turtle.fd(x)
+    turtle.pendown()
 
-    # 停止记录多边形的顶点。当前的乌龟位置是多边形的最后一个顶点。将与第一个顶点相连。
-    turtle.end_poly()
 
-    # 返回最后记录的多边形。
-    handForm = turtle.get_poly()
-    turtle.register_shape(name, handForm)
+# 画表盘线并标记数字
+def drw_clock(x, y, z, m):
+    drw_null(x)
+    turtle.pensize(width=z)
+    turtle.fd(y)
+    ddd(m)
+    backorigin()
 
-def Init():
-    global secHand, minHand, hurHand, printer
-    # 重置Turtle指向北
-    turtle.mode("logo")
-    # 建立三个表针Turtle并初始化
-    mkHand("secHand", 135)
-    mkHand("minHand", 125)
-    mkHand("hurHand", 90)
-    secHand = turtle.Turtle()
-    secHand.shape("secHand")
-    minHand = turtle.Turtle()
-    minHand.shape("minHand")
-    hurHand = turtle.Turtle()
-    hurHand.shape("hurHand")
-    for hand in secHand, minHand, hurHand:
-        hand.shapesize(1, 1, 3)
-    hand.speed(0)
 
-    # 建立输出文字Turtle
-    printer = turtle.Turtle()
-    # 隐藏画笔的turtle形状
-    printer.hideturtle()
-    printer.penup()
+# 画表盘外圆
+def setup_circle(x):
+    turtle.penup()
+    turtle.goto(x, 0)
+    turtle.pendown()
+    turtle.circle(x)
 
-def SetupClock(radius):
-    # 建立表的外框
-    turtle.reset()
-    turtle.pensize(7)
+
+# 调整表盘数字位置
+def ddd(h):
+    if 60 > turtle.heading() >= 0:
+        turtle.write(str(h), align="center", font=('微软雅黑', 16, "bold"))
+    elif 120 > turtle.heading() >= 60:
+        drw_null(15)
+        turtle.write(str(h), align="center", font=('微软雅黑', 16, "bold"))
+    elif 180 > turtle.heading() >= 120:
+        drw_null(30)
+        turtle.write(str(h), align="center", font=('微软雅黑', 16, "bold"))
+    elif 360 > turtle.heading() >= 300:
+        turtle.write(str(h), align="center", font=('微软雅黑', 16, "bold"))
+    elif 300 > turtle.heading() >= 240:
+        drw_null(15)
+        turtle.write(str(h), align="center", font=('微软雅黑', 16, "bold"))
+    elif 240 > turtle.heading() >= 180:
+        drw_null(30)
+        turtle.write(str(h), align="center", font=('微软雅黑', 16, "bold"))
+    # 创建表
+
+
+def setup_Clock():
     for i in range(60):
-        Skip(radius)
-    if i % 5 == 0:
-        turtle.forward(20)
-        Skip(-radius - 20)
-        Skip(radius + 20)
-
-        if i == 0:
-            turtle.write(int(12), align="center", font=("Courier", 14, "bold"))
-        elif i == 30:
-            Skip(25)
-            turtle.write(int(i / 5), align="center", font=("Courier", 14, "bold"))
-            Skip(-25)
-
-        elif (i == 25 or i == 35):
-            Skip(20)
-            turtle.write(int(i / 5), align="center", font=("Courier", 14, "bold"))
-            Skip(-20)
+        if i == 0 or i == 30:
+            drw_clock(200, 20, 4, i)
+            turtle.setheading(i * 6 + 6)
+        elif i == 5 or i == 15 or i == 25:
+            drw_clock(200, 20, 2, i)
+            turtle.setheading(i * 6 + 6)
+        elif i == 10 or i == 20:
+            drw_clock(200, 20, 4, i)
+            turtle.setheading(i * 6 + 6)
+        elif i == 35 or i == 45 or i == 55:
+            drw_clock(200, 20, 2, i)
+            turtle.setheading(i * 6 + 6)
+        elif i == 40 or i == 50:
+            drw_clock(200, 20, 4, i)
+            turtle.setheading(i * 6 + 6)
         else:
-            turtle.write(int(i / 5), align="center", font=("Courier", 14, "bold"))
-            Skip(-radius - 20)
-
-    else:
-        turtle.dot(5)
-        Skip(-radius)
-        turtle.right(6)
+            drw_clock(205, 15, 1, '')
+            turtle.setheading(i * 6 + 6)
+    setup_circle(220)
+    setup_circle(250)
 
 
-def Week(t):
-    week = ["星期一", "星期二", "星期三",
-            "星期四", "星期五", "星期六", "星期日"]
-    return week[t.weekday()]
+def date(t):
+    week = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+    w = week[turtle.weekday()]
+    return '%s年%s月%s日\n%s时%s分%s秒\n%s' % (
+    turtle.year, turtle.month, turtle.day, turtle.hour, turtle.minute, turtle.second, w)
 
-def Date(t):
-    y = t.year
-    m = t.month
-    d = t.day
-    return "%s %d%d" % (y, m, d)
 
-def Tick():
-    # 绘制表针的动态显示
+def run_Clock():
     t = datetime.today()
-    second = t.second + t.microsecond * 0.000001
-    minute = t.minute + second / 60.0
-    hour = t.hour + minute / 60.0
-    secHand.setheading(6 * second)
-    minHand.setheading(6 * minute)
-    hurHand.setheading(30 * hour)
-    turtle.tracer(False)
-    printer.forward(65)
-    printer.write(Week(t), align="center",
-                  font=("Courier", 14, "bold"))
-    printer.back(130)
-    printer.write(Date(t), align="center",
-                  font=("Courier", 14, "bold"))
-    printer.home()
-    turtle.tracer(True)
+    mz.setheading(6 * (t.second + t.microsecond * 0.000001))
+    fz.setheading(6 * t.minute)
+    sz.setheading(30 * t.hour)
+    turtle.ontimer(run_Clock, 10)
 
-    # 100ms后继续调用tick
-    turtle.ontimer(Tick, 100)
 
 def main():
-    # 打开/关闭龟动画，并为更新图纸设置延迟。
+    turtle.mode('logo')
+    setup_Hand()
     turtle.tracer(False)
-    Init()
-    SetupClock(160)
+    setup_Clock()
     turtle.tracer(True)
-    Tick()
+    run_Clock()
     turtle.mainloop()
+
 
 if __name__ == "__main__":
     main()
