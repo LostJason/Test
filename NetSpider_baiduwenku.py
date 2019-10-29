@@ -10,7 +10,6 @@ import os
 
 session = requests.session()
 
-
 def fetch_url(url):
     return session.get(url).content.decode('gbk')
 
@@ -65,7 +64,7 @@ def parse_other(doc_id):
     content_url = "https://wenku.baidu.com/browse/getbcsurl?doc_id=" + doc_id + "&pn=1&rn=99999&type=ppt"
     content = fetch_url(content_url)
     url_list = re.findall('{"zoom":"(.*?)","page"', content)
-    url_list = [item.replace("\", '') for item in url_list]
+    url_list = [item.replace("\\", '') for item in url_list]
     if not os.path.exists(doc_id):
         os.mkdir(doc_id)
     for index, url in enumerate(url_list):
